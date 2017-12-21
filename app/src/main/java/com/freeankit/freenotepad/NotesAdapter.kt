@@ -4,10 +4,10 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import kotlinx.android.synthetic.main.item_note.view.*
 
 /**
  * @author Ankit Kumar (ankitdroiddeveloper@gmail.com) on 20/12/2017 (MM/DD/YYYY )
@@ -21,7 +21,7 @@ class NotesAdapter(private val context: Context) : RecyclerView.Adapter<NotesAda
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_note, parent, false)
+        val view = context.layoutInflator.inflate(R.layout.item_note, parent, false)
         return NotesViewHolder(view)
     }
 
@@ -30,7 +30,7 @@ class NotesAdapter(private val context: Context) : RecyclerView.Adapter<NotesAda
     }
 
     class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        internal var text: TextView = itemView.findViewById(R.id.text_)
+        internal var text: TextView = itemView.text_
     }
 
     override fun getItemId(position: Int): Long {
@@ -46,9 +46,9 @@ class NotesAdapter(private val context: Context) : RecyclerView.Adapter<NotesAda
         if (isRefreshing) return
         isRefreshing = true
         DataStore.execute {
-            val notes = DataStore.notes?.all
+            val notes = DataStore.notes.all
             Handler(Looper.getMainLooper()).post {
-                this@NotesAdapter.notes = notes!!
+                this@NotesAdapter.notes = notes
                 notifyDataSetChanged()
                 isRefreshing = false
             }

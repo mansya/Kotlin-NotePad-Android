@@ -1,25 +1,25 @@
 package com.freeankit.freenotepad
 
 import android.content.Context
-
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
+import org.jetbrains.anko.doAsync
 
 /**
  * @author Ankit Kumar (ankitdroiddeveloper@gmail.com) on 20/12/2017 (MM/DD/YYYY )
  */
 object DataStore {
-
-    val EXEC: Executor = Executors.newSingleThreadExecutor()
-
-    var notes: NoteDatabase? = null
+    @JvmStatic
+    lateinit var notes: NoteDatabase
         private set
 
     fun init(context: Context) {
         notes = NoteDatabase(context)
     }
 
-    fun execute(runnable: () -> Boolean) {
-        EXEC.execute(runnable)
+    fun execute(runnable: Runnable) {
+        execute { runnable.run() }
+    }
+
+    fun execute(fn: () -> Unit) {
+        doAsync { fn() }
     }
 }

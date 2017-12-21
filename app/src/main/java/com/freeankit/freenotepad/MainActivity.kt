@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 /**
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         recycler.layoutManager = LinearLayoutManager(this)
         recycler.addItemDecoration(SpaceItemDecoration(this, R.dimen.margin_small))
         recycler.adapter = NotesAdapter(this)
+        fab.setOnClickListener { startActivity(CreateActivity[this]) }
     }
 
     override fun onResume() {

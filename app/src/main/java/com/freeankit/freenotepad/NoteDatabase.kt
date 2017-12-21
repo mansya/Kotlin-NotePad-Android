@@ -4,11 +4,11 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.provider.BaseColumns
-import com.freeankit.freenotepad.NotesContract.NoteTable.Companion.CREATED_AT
-import com.freeankit.freenotepad.NotesContract.NoteTable.Companion.IS_PINNED
-import com.freeankit.freenotepad.NotesContract.NoteTable.Companion.TEXT
-import com.freeankit.freenotepad.NotesContract.NoteTable.Companion.UPDATED_AT
-import com.freeankit.freenotepad.NotesContract.NoteTable.Companion._TABLE_NAME
+import com.freeankit.freenotepad.NotesOpenHelper.NoteTable.Companion.CREATED_AT
+import com.freeankit.freenotepad.NotesOpenHelper.NoteTable.Companion.IS_PINNED
+import com.freeankit.freenotepad.NotesOpenHelper.NoteTable.Companion.TEXT
+import com.freeankit.freenotepad.NotesOpenHelper.NoteTable.Companion.UPDATED_AT
+import com.freeankit.freenotepad.NotesOpenHelper.NoteTable.Companion._TABLE_NAME
 import java.lang.StringBuilder
 import java.util.*
 

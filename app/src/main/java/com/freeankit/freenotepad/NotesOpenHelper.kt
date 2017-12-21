@@ -5,6 +5,10 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 import com.freeankit.freenotepad.NotesOpenHelper.NoteTable.Companion.CREATED_AT
+import com.freeankit.freenotepad.NotesOpenHelper.NoteTable.Companion.IS_PINNED
+import com.freeankit.freenotepad.NotesOpenHelper.NoteTable.Companion.TEXT
+import com.freeankit.freenotepad.NotesOpenHelper.NoteTable.Companion.UPDATED_AT
+import com.freeankit.freenotepad.NotesOpenHelper.NoteTable.Companion._ID
 import com.freeankit.freenotepad.NotesOpenHelper.NoteTable.Companion._TABLE_NAME
 
 /**
@@ -21,18 +25,17 @@ class NotesOpenHelper(context: Context) : SQLiteOpenHelper(context, "notes.db", 
         onCreate(db)
     }
 
-    val SQL_CREATE_ENTRIES = "CREATE TABLE " + _TABLE_NAME + " (" +
-            NoteTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-            NoteTable.TEXT + " TEXT, " +
-            NoteTable.IS_PINNED + " INTEGER, " +
-            CREATED_AT + " INTEGER, " +
-            NoteTable.UPDATED_AT + " INTEGER" +
-            ")"
+    val SQL_CREATE_ENTRIES = """CREATE TABLE $_TABLE_NAME (
+        |$_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        |$TEXT TEXT,
+        |$IS_PINNED INTEGER,
+        |$CREATED_AT INTEGER,
+        |$UPDATED_AT INTEGER)"""
+            .trimMargin()
 
-    val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + _TABLE_NAME
+    val SQL_DELETE_ENTRIES = """DROP TABLE IF EXISTS $_TABLE_NAME"""
 
-    val SQL_QUERY_ALL =
-            "SELECT * FROM NOTE ORDER BY $CREATED_AT DESC"
+    val SQL_QUERY_ALL = "SELECT * FROM NOTE ORDER BY $CREATED_AT DESC"
 
     interface NoteTable : BaseColumns {
         companion object {

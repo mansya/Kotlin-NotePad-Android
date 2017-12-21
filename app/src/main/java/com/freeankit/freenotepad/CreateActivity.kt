@@ -6,23 +6,22 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_create.*
 import java.util.*
 
 /**
  * @author Ankit Kumar (ankitdroiddeveloper@gmail.com) on 20/12/2017 (MM/DD/YYYY )
  */
 class CreateActivity : AppCompatActivity() {
-    operator fun get(context: Context): Intent {
-        return Intent(context, CreateActivity::class.java)
+    companion object {
+        operator fun get(context: Context): Intent {
+            return Intent(context, CreateActivity::class.java)
+        }
     }
-
-    private var editText: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
-        editText = findViewById(R.id.edit_text)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -42,16 +41,16 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun save() {
-        DataStore.INSTANCE.execute(Runnable {
+        DataStore.execute(Runnable {
             val note = updateNote()
-            DataStore.getNotes().insert(note)
+            DataStore.notes.insert(note)
         })
     }
 
     private fun updateNote(): Note {
         val note = Note()
-        note.setText(editText!!.text.toString())
-        note.setUpdatedAt(Date())
+        note.text = edit_text.text.toString()
+        note.updatedAt = Date()
         return note
     }
 }
