@@ -5,6 +5,7 @@ A Simple notepad sample application using Kotlin, Anko, Vector Drawables
 
 # Some Screenshot
 
+![First Time Open](https://github.com/AnkitDroidGit/Kotlin-NotePad/blob/master/art/1.png)
 
 
 ### Contact - Let's connect to each other
