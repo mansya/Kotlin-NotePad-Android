@@ -2,6 +2,7 @@ package com.freeankit.freenotepad
 
 import android.app.Application
 import com.crashlytics.android.Crashlytics
+import com.freeankit.freenotepad.db.DataStore
 import io.fabric.sdk.android.Fabric
 
 
