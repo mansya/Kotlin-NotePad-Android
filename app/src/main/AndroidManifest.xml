@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.freeankit.freenotepad">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".NoteApp"
         android:allowBackup="true"
@@ -20,5 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateActivity" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="54af92b729e01c5ebf5265bab6d57558519d61c7" />
     </application>
 </manifest>

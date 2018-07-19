@@ -2,6 +2,7 @@ package com.freeankit.freenotepad
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -16,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        recycler.layoutManager = LinearLayoutManager(this)
+        recycler.layoutManager = GridLayoutManager(this, 2)
         recycler.addItemDecoration(SpaceItemDecoration(this, R.dimen.margin_small))
         recycler.adapter = NotesAdapter(this)
         fab.setOnClickListener { startActivity(CreateActivity[this]) }

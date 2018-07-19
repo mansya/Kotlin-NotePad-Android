@@ -38,7 +38,7 @@ class NotesAdapter(private val context: Context) : RecyclerView.Adapter<NotesAda
     }
 
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         refresh()
     }
 

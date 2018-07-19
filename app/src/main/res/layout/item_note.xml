@@ -10,7 +10,7 @@
     <LinearLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
         android:clickable="true"
         android:minHeight="@dimen/card_min_height"
@@ -21,8 +21,8 @@
             android:id="@+id/text_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alpha="0.7"
-            android:textAppearance="?textAppearanceListItemSecondary"
+            android:maxLines="2"
+            android:maxLength="200"
             tools:text="Lorem Ipsum et al." />
 
     </LinearLayout>

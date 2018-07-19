@@ -12,7 +12,7 @@ import android.view.View
 class SpaceItemDecoration(context: Context, dimens: Int) : RecyclerView.ItemDecoration() {
     var space: Int = context.resources.getDimensionPixelOffset(dimens)
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
         val position = parent.getChildAdapterPosition(view)
         when (getOrientation(parent)) {
