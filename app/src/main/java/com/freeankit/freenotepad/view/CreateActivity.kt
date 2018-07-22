@@ -9,8 +9,11 @@ import android.view.MenuItem
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.db.DataStore
 import com.freeankit.freenotepad.model.Note
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_create.*
 import java.util.*
+import com.google.firebase.database.DatabaseReference
+
 
 /**
  * @author Ankit Kumar (ankitdroiddeveloper@gmail.com) on 20/12/2017 (MM/DD/YYYY )
@@ -56,21 +59,30 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun save() {
-        if (id == -1)
-            DataStore.execute(Runnable {
-                val note = saveNote()
-                DataStore.notes.insert(note)
-            })
-        else DataStore.execute(Runnable {
-            val note = updateNote()
-            DataStore.notes.update(note)
-        })
+        if (id == -1) {
+            val note = saveNote()
+            saveDataToFirebase(note)
+        }
+
+//            DataStore.execute(Runnable {
+//                val note = saveNote()
+//                DataStore.notes.insert(note)
+//                saveDataToFirebase(note)
+//            })
+        else {
+            val note = saveNote()
+            saveDataToFirebase(note)
+        }
+//            DataStore.execute(Runnable {
+//            val note = updateNote()
+//            DataStore.notes.update(note)
+//        })
     }
 
     private fun saveNote(): Note {
         val note = Note()
         note.text = edit_text.text.toString()
-        note.updatedAt = Date()
+//        note.updatedAt = Date()
         return note
     }
 
@@ -78,7 +90,18 @@ class CreateActivity : AppCompatActivity() {
         val note = Note()
         note.id = id
         note.text = edit_text.text.toString()
-        note.updatedAt = Date()
+//        note.updatedAt = Date()
         return note
+    }
+
+    private fun saveDataToFirebase(note: Note) {
+        //Getting reference of DB
+        val database = FirebaseDatabase.getInstance()
+        val ideasDB = database.getReference("Ideas")
+        val key = ideasDB.push().key
+        val noteValues: Map<String, Any> = note.toMap()
+        val childUpdates = HashMap<String, Any>()
+        childUpdates["/note/$key"] = noteValues
+        ideasDB.updateChildren(childUpdates)
     }
 }

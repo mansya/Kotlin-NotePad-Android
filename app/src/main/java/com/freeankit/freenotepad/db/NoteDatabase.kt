@@ -67,8 +67,8 @@ class NoteDatabase(context: Context) {
         note.id = cursor.getInt(col++)
         note.text = cursor.getString(col++)
         note.isPinned = cursor.getInt(col++) != 0
-        note.createdAt = Date(cursor.getLong(col++))
-        note.updatedAt = Date(cursor.getLong(col))
+//        note.createdAt = Date(cursor.getLong(col++))
+//        note.updatedAt = Date(cursor.getLong(col))
         return note
     }
 
@@ -81,8 +81,8 @@ class NoteDatabase(context: Context) {
         note.id = id
         note.text = cursor.getString(cursor.getColumnIndex(TEXT))
         note.isPinned = cursor.getInt(cursor.getColumnIndex(IS_PINNED)) != 0
-        note.createdAt = Date(cursor.getLong(cursor.getColumnIndex(CREATED_AT)))
-        note.updatedAt = Date(cursor.getLong(cursor.getColumnIndex(UPDATED_AT)))
+//        note.createdAt = Date(cursor.getLong(cursor.getColumnIndex(CREATED_AT)))
+//        note.updatedAt = Date(cursor.getLong(cursor.getColumnIndex(UPDATED_AT)))
         return note
     }
 
@@ -103,8 +103,8 @@ class NoteDatabase(context: Context) {
         }
         values.put(TEXT, note.text)
         values.put(IS_PINNED, note.isPinned)
-        values.put(CREATED_AT, note.createdAt.time)
-        values.put(UPDATED_AT, note.updatedAt?.time)
+//        values.put(CREATED_AT, note.createdAt.time)
+//        values.put(UPDATED_AT, note.updatedAt?.time)
         return values
     }
 

@@ -40,12 +40,28 @@ class NotesAdapter(private val context: Context, private val listener: NotesAdap
     inner class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun getItemId(position: Int): Long {
-        return notes[position].id.toLong()
+        return position.toLong()
     }
 
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         refresh()
+    }
+
+
+    fun addData(notess: List<Note>) {
+        notes.clear()
+//        if (isRefreshing) return
+//        isRefreshing = true
+        notes.addAll(notess)
+        notifyDataSetChanged()
+    }
+
+    fun addNote(note: Note) {
+//        if (isRefreshing) return
+//        isRefreshing = true
+        notes.add(note)
+        notifyDataSetChanged()
     }
 
     fun refresh() {
