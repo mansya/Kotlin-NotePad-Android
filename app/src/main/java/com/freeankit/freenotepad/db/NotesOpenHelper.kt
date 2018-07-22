@@ -33,7 +33,7 @@ class NotesOpenHelper(context: Context) : SQLiteOpenHelper(context, "notes.db", 
         |$UPDATED_AT INTEGER)"""
             .trimMargin()
 
-    val SQL_DELETE_ENTRIES = """DROP TABLE IF EXISTS $_TABLE_NAME"""
+    val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS $_TABLE_NAME"
 
     val SQL_QUERY_ALL = "SELECT * FROM NOTE ORDER BY $CREATED_AT DESC"
 

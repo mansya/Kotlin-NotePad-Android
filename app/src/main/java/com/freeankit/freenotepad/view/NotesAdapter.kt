@@ -16,12 +16,16 @@ import kotlinx.android.synthetic.main.item_note.view.*
 /**
  * @author Ankit Kumar (ankitdroiddeveloper@gmail.com) on 20/12/2017 (MM/DD/YYYY )
  */
-class NotesAdapter(private val context: Context) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+class NotesAdapter(private val context: Context, private val listener: NotesAdapter.OnPlaceClickListener) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
     private var isRefreshing = false
-    private var notes: List<Note> = ArrayList()
+    private var notes: MutableList<Note> = ArrayList()
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         val note = notes[position]
-        holder.text.text = note.text
+        holder.itemView.text_.text = note.text
+        holder.itemView.content.setOnClickListener {
+            listener.onItemClicked(note)
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
@@ -33,9 +37,7 @@ class NotesAdapter(private val context: Context) : RecyclerView.Adapter<NotesAda
         return notes.size
     }
 
-    class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        internal var text: TextView = itemView.text_
-    }
+    inner class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun getItemId(position: Int): Long {
         return notes[position].id.toLong()
@@ -52,11 +54,17 @@ class NotesAdapter(private val context: Context) : RecyclerView.Adapter<NotesAda
         DataStore.execute {
             val notes = DataStore.notes.all
             Handler(Looper.getMainLooper()).post {
-                this@NotesAdapter.notes = notes
+                this@NotesAdapter.notes = notes as MutableList<Note>
                 notifyDataSetChanged()
                 isRefreshing = false
             }
         }
     }
+
+
+    interface OnPlaceClickListener {
+        fun onItemClicked(project: Note)
+    }
+
 
 }

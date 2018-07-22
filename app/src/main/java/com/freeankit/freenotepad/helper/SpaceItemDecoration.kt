@@ -16,9 +16,10 @@ class SpaceItemDecoration(context: Context, dimens: Int) : RecyclerView.ItemDeco
         super.getItemOffsets(outRect, view, parent, state)
         val position = parent.getChildAdapterPosition(view)
         when (getOrientation(parent)) {
-            LinearLayoutManager.VERTICAL -> if (position != 0) outRect.top = space
-            LinearLayoutManager.HORIZONTAL -> if (position != 0) outRect.left = space
+            LinearLayoutManager.VERTICAL -> outRect.top = space
+            LinearLayoutManager.HORIZONTAL -> outRect.left = space
         }
+        //if (position != 0)
     }
 
     private fun getOrientation(parent: RecyclerView): Int {

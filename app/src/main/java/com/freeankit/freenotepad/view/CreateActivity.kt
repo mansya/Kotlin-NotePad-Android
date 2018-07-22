@@ -16,6 +16,8 @@ import java.util.*
  * @author Ankit Kumar (ankitdroiddeveloper@gmail.com) on 20/12/2017 (MM/DD/YYYY )
  */
 class CreateActivity : AppCompatActivity() {
+    private var id: Int = -1
+
     companion object {
         operator fun get(context: Context): Intent {
             return Intent(context, CreateActivity::class.java)
@@ -25,6 +27,16 @@ class CreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
+        if (intent.hasExtra("id")) {
+            id = intent.extras["id"] as Int
+        }
+        if (id != -1)
+            getNotFromDB(id)
+    }
+
+    private fun getNotFromDB(id: Int) {
+        val note = DataStore.notes.byId(id)
+        edit_text.setText(note.text)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -44,14 +56,27 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun save() {
-        DataStore.execute(Runnable {
+        if (id == -1)
+            DataStore.execute(Runnable {
+                val note = saveNote()
+                DataStore.notes.insert(note)
+            })
+        else DataStore.execute(Runnable {
             val note = updateNote()
-            DataStore.notes.insert(note)
+            DataStore.notes.update(note)
         })
+    }
+
+    private fun saveNote(): Note {
+        val note = Note()
+        note.text = edit_text.text.toString()
+        note.updatedAt = Date()
+        return note
     }
 
     private fun updateNote(): Note {
         val note = Note()
+        note.id = id
         note.text = edit_text.text.toString()
         note.updatedAt = Date()
         return note

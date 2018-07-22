@@ -4,6 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.provider.BaseColumns
+import android.provider.BaseColumns._ID
+import android.util.Log
 import com.freeankit.freenotepad.db.NotesOpenHelper.NoteTable.Companion.CREATED_AT
 import com.freeankit.freenotepad.db.NotesOpenHelper.NoteTable.Companion.IS_PINNED
 import com.freeankit.freenotepad.db.NotesOpenHelper.NoteTable.Companion.TEXT
@@ -13,9 +15,11 @@ import com.freeankit.freenotepad.model.Note
 import java.lang.StringBuilder
 import java.util.*
 
+
 /**
  * @author Ankit Kumar (ankitdroiddeveloper@gmail.com) on 20/12/2017 (MM/DD/YYYY )
  */
+
 class NoteDatabase(context: Context) {
 
     private val helper: NotesOpenHelper = NotesOpenHelper(context)
@@ -23,7 +27,7 @@ class NoteDatabase(context: Context) {
     val all: List<Note>
         get() {
             val cursor = helper.readableDatabase.query(_TABLE_NAME, null, null, null, null, null,
-                    CREATED_AT)
+                    "$CREATED_AT DESC")
             val retval = allFromCursor(cursor)
             cursor.close()
             return retval
@@ -93,11 +97,26 @@ class NoteDatabase(context: Context) {
         return note
     }
 
+
+    fun byId(id: Int): Note {
+        val cursor = helper.readableDatabase.query(_TABLE_NAME, null, "$_ID=$id", null, null, null, null)
+        // val cursor = helper.readableDatabase.rawQuery("SELECT * FROM $_TABLE_NAME WHERE $_ID= $id", null, null)
+        cursor.moveToFirst()
+        val note = Note()
+        note.id = id
+        note.text = cursor.getString(cursor.getColumnIndex(TEXT))
+        note.isPinned = cursor.getInt(cursor.getColumnIndex(IS_PINNED)) != 0
+        note.createdAt = Date(cursor.getLong(cursor.getColumnIndex(CREATED_AT)))
+        note.updatedAt = Date(cursor.getLong(cursor.getColumnIndex(UPDATED_AT)))
+        return note
+    }
+
     private fun allFromCursor(cursor: Cursor): List<Note> {
         val retval = ArrayList<Note>()
         while (cursor.moveToNext()) {
             retval.add(fromCursor(cursor))
         }
+        Log.d("Details", retval.toString())
         return retval
     }
 
