@@ -33,31 +33,6 @@ class NoteDatabase(context: Context) {
             return retval
         }
 
-    fun loadAllByIds(vararg ids: Int): List<Note> {
-        val questionMarks = StringBuilder()
-        var i = 0
-        while (i++ < ids.size) {
-            questionMarks.append("?")
-            if (i <= ids.size - 1) {
-                questionMarks.append(", ")
-            }
-        }
-        val args = arrayOfNulls<String>(ids.size)
-        i = 0
-        while (i < ids.size) {
-            args[i] = Integer.toString(ids[i])
-            ++i
-        }
-        val selection = BaseColumns._ID + " IN (" + questionMarks.toString() + ")"
-        val cursor = helper.readableDatabase.query(_TABLE_NAME, null,
-                selection,
-                args, null, null,
-                CREATED_AT)
-        val retval = allFromCursor(cursor)
-        cursor.close()
-        return retval
-    }
-
     fun insert(vararg notes: Note) {
         val values = fromNotes(notes)
         val db = helper.writableDatabase
