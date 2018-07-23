@@ -7,16 +7,15 @@ import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.freeankit.freenotepad.R
-import com.freeankit.freenotepad.R.id.recycler
 import com.freeankit.freenotepad.helper.SpaceItemDecoration
 import com.freeankit.freenotepad.model.Note
-import com.google.firebase.FirebaseError
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import org.jetbrains.anko.custom.async
 
 
 /**
@@ -26,7 +25,7 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
 
     override fun onItemClicked(project: Note) {
         Handler().postDelayed({
-            startActivity(CreateActivity[this].putExtra("id", project.id))
+            startActivity(CreateActivity[this].putExtra("id", project))
         }, 150)
     }
 
@@ -77,6 +76,7 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
         myRef.addValueEventListener(object : ValueEventListener {
             val noteList = arrayListOf<Note>()
             override fun onDataChange(snapshot: DataSnapshot) {
+                noteList.clear()
                 Log.e("Count ", "" + snapshot.childrenCount)
                 for (postSnapshot in snapshot.children) {
                     val post = postSnapshot.getValue(Note::class.java)

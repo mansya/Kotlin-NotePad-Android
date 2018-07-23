@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
+    android:background="@color/white"
     android:minHeight="@dimen/card_min_height">
 
     <LinearLayout
@@ -14,15 +15,34 @@
         android:clickable="true"
         android:minHeight="@dimen/card_min_height"
         android:orientation="vertical"
-        android:padding="@dimen/margin_small">
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/title_text_"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="100"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            tools:text="Title  gcior" />
 
         <TextView
             android:id="@+id/text_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="300"
-            android:maxLines="3"
-            tools:text="Lorem Ipsum et al." />
+            android:paddingLeft="5dp"
+            android:textColor="@color/black"
+            tools:text="Lorem Ipsum et al.crete
+tvt
+ybr
+yrb
+uyt
+b
+tuyn
+tyi
+ynu" />
 
     </LinearLayout>
 

@@ -7,19 +7,17 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.freeankit.freenotepad.R
-import com.freeankit.freenotepad.db.DataStore
 import com.freeankit.freenotepad.model.Note
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_create.*
 import java.util.*
-import com.google.firebase.database.DatabaseReference
 
 
 /**
  * @author Ankit Kumar (ankitdroiddeveloper@gmail.com) on 20/12/2017 (MM/DD/YYYY )
  */
 class CreateActivity : AppCompatActivity() {
-    private var id: Int = -1
+    private var id: Note? = null
 
     companion object {
         operator fun get(context: Context): Intent {
@@ -31,15 +29,15 @@ class CreateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
         if (intent.hasExtra("id")) {
-            id = intent.extras["id"] as Int
+            id = intent.extras["id"] as Note
         }
-        if (id != -1)
-            getNotFromDB(id)
+        id?.let { getNotFromDB(it) }
     }
 
-    private fun getNotFromDB(id: Int) {
-        val note = DataStore.notes.byId(id)
+    private fun getNotFromDB(note: Note) {
+        //val note = DataStore.notes.byId(id)
         edit_text.setText(note.text)
+        title_text.setText(note.title)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -59,49 +57,45 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun save() {
-        if (id == -1) {
+        if (id == null) {
             val note = saveNote()
             saveDataToFirebase(note)
+        } else {
+            val note = updateNote()
+            note?.let { updateDataToFirebase(it) }
         }
-
-//            DataStore.execute(Runnable {
-//                val note = saveNote()
-//                DataStore.notes.insert(note)
-//                saveDataToFirebase(note)
-//            })
-        else {
-            val note = saveNote()
-            saveDataToFirebase(note)
-        }
-//            DataStore.execute(Runnable {
-//            val note = updateNote()
-//            DataStore.notes.update(note)
-//        })
     }
 
     private fun saveNote(): Note {
         val note = Note()
         note.text = edit_text.text.toString()
-//        note.updatedAt = Date()
+        note.title = title_text.text.toString()
         return note
     }
 
-    private fun updateNote(): Note {
-        val note = Note()
-        note.id = id
-        note.text = edit_text.text.toString()
-//        note.updatedAt = Date()
-        return note
+    private fun updateNote(): Note? {
+        id?.text = edit_text.text.toString()
+        id?.title = title_text.text.toString()
+        return id
     }
 
     private fun saveDataToFirebase(note: Note) {
-        //Getting reference of DB
         val database = FirebaseDatabase.getInstance()
         val ideasDB = database.getReference("Ideas")
         val key = ideasDB.push().key
+        note.id = key!!
         val noteValues: Map<String, Any> = note.toMap()
         val childUpdates = HashMap<String, Any>()
         childUpdates["/note/$key"] = noteValues
+        ideasDB.updateChildren(childUpdates)
+    }
+
+    private fun updateDataToFirebase(note: Note) {
+        val database = FirebaseDatabase.getInstance()
+        val ideasDB = database.getReference("Ideas")
+        val noteValues: Map<String, Any> = note.toMap()
+        val childUpdates = HashMap<String, Any>()
+        childUpdates["/note/${note.id}"] = noteValues
         ideasDB.updateChildren(childUpdates)
     }
 }
