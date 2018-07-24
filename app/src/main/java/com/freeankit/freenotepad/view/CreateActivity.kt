@@ -4,11 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.model.Note
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_create.*
 import java.util.*
 
@@ -51,6 +55,9 @@ class CreateActivity : AppCompatActivity() {
                 save()
                 finish()
             }
+            R.id.action_delete -> {
+                deleteThisNote()
+            }
             else -> return super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
@@ -58,25 +65,24 @@ class CreateActivity : AppCompatActivity() {
 
     private fun save() {
         if (id == null) {
-            val note = saveNote()
-            saveDataToFirebase(note)
+            saveNote()
         } else {
-            val note = updateNote()
-            note?.let { updateDataToFirebase(it) }
+            updateNote()
         }
     }
 
-    private fun saveNote(): Note {
+    private fun saveNote() {
         val note = Note()
         note.text = edit_text.text.toString()
         note.title = title_text.text.toString()
-        return note
+        if (!note.title.isNullOrEmpty() || !note.text.isNullOrEmpty())
+            saveDataToFirebase(note)
     }
 
-    private fun updateNote(): Note? {
+    private fun updateNote() {
         id?.text = edit_text.text.toString()
         id?.title = title_text.text.toString()
-        return id
+        id?.let { updateDataToFirebase(it) }
     }
 
     private fun saveDataToFirebase(note: Note) {
@@ -97,5 +103,24 @@ class CreateActivity : AppCompatActivity() {
         val childUpdates = HashMap<String, Any>()
         childUpdates["/note/${note.id}"] = noteValues
         ideasDB.updateChildren(childUpdates)
+    }
+
+    private fun deleteThisNote() {
+        if (id != null) {
+            val database = FirebaseDatabase.getInstance()
+            val deleteQuery = database.getReference("Ideas").child("note").orderByChild("title").equalTo(id?.title)
+            deleteQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (appleSnapshot in dataSnapshot.children) {
+                        appleSnapshot.ref.removeValue()
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.e("Del", "onCancelled", databaseError.toException())
+                }
+            })
+        }
+        finish()
     }
 }
