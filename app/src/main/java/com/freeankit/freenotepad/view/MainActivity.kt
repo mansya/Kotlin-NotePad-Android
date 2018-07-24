@@ -46,12 +46,12 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
 
     public override fun onDestroy() {
         super.onDestroy()
-//        recycler.adapter = null
+
     }
 
     private fun refresh() {
         loadNotes()
-//        (recycler.adapter as NotesAdapter).refresh()
+
     }
 
 
@@ -59,20 +59,6 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
         // Write a message to the database
         val database = FirebaseDatabase.getInstance()
         val myRef = database.getReference("Ideas").child("note")
-//        myRef.addValueEventListener(object : ValueEventListener {
-//            override fun onCancelled(p0: DatabaseError) {
-//            }
-//
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                val ti = object : GenericTypeIndicator<MutableList<Note>>() {}
-//                val value = dataSnapshot.getValue(ti)
-//                if (value != null) {
-//                    Log.d("Firebase DB", value.toString())
-//                    (recycler.adapter as NotesAdapter).addData(value)
-//                }
-//            }
-//        })
-
         myRef.addValueEventListener(object : ValueEventListener {
             val noteList = arrayListOf<Note>()
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -127,19 +113,17 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
-        return true
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+        when (item.itemId) {
+            R.id.action_settings -> {
 
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

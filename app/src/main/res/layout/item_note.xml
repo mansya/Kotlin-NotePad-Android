@@ -32,6 +32,7 @@
             android:id="@+id/text_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="4"
             android:paddingLeft="5dp"
             android:textColor="@color/black"
             tools:text="Lorem Ipsum et al.crete

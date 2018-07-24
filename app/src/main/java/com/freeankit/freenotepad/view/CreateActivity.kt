@@ -44,24 +44,6 @@ class CreateActivity : AppCompatActivity() {
         title_text.setText(note.title)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_accept, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_accept -> {
-                save()
-                finish()
-            }
-            R.id.action_delete -> {
-                deleteThisNote()
-            }
-            else -> return super.onOptionsItemSelected(item)
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun save() {
         if (id == null) {
@@ -122,5 +104,24 @@ class CreateActivity : AppCompatActivity() {
             })
         }
         finish()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_accept, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_accept -> {
+                save()
+                finish()
+            }
+            R.id.action_delete -> {
+                deleteThisNote()
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
