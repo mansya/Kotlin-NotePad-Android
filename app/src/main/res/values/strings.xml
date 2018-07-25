@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name">Ideas</string>
     <string name="action_settings">Settings</string>
-    <string name="start_typing">Start Typing…</string>
-    <string name="title">Title…</string>
+    <string name="start_typing">Your Idea</string>
+    <string name="title">Title</string>
     <string name="accept">Accept</string>
     <string name="delete">Delete</string>
+    <string name="rate_msg">Please rate this idea in the following terms</string>
+    <string name="category_simple">Simple</string>
+    <string name="category_achievable">Achievable</string>
+    <string name="category_dev_diff">Development Difficulties</string>
+    <string name="category_everyday">Everyday Use</string>
+    <string name="category_everyone">Everyone Use</string>
+    <string name="dots">...........</string>
 </resources>

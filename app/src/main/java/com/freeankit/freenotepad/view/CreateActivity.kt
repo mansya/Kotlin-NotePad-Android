@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.model.Note
 import com.google.firebase.database.DataSnapshot
@@ -22,6 +24,7 @@ import java.util.*
  */
 class CreateActivity : AppCompatActivity() {
     private var id: Note? = null
+    private var list_of_items = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
 
     companion object {
         operator fun get(context: Context): Intent {
@@ -35,13 +38,33 @@ class CreateActivity : AppCompatActivity() {
         if (intent.hasExtra("id")) {
             id = intent.extras["id"] as Note
         }
-        id?.let { getNotFromDB(it) }
+        if (id != null) {
+            hideKeybaord()
+            getNotFromDB(id!!)
+        } else {
+            showKeyboard()
+        }
+        setSpinners()
+    }
+
+    private fun setSpinners() {
+        // Create an ArrayAdapter using a simple spinner layout and languages array
+        val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, list_of_items)
+        // Set layout to use when the list of choices appear
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Set Adapter to Spinner
+        spinner_achievable!!.adapter = aa
+        spinner_dev_diff!!.adapter = aa
+        spinner_everyday!!.adapter = aa
+        spinner_everyone!!.adapter = aa
+        spinner_simple!!.adapter = aa
     }
 
     private fun getNotFromDB(note: Note) {
         //val note = DataStore.notes.byId(id)
         edit_text.setText(note.text)
         title_text.setText(note.title)
+
     }
 
 
@@ -123,5 +146,16 @@ class CreateActivity : AppCompatActivity() {
             else -> return super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun hideKeybaord() {
+        val imm: InputMethodManager = getSystemService(
+                Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(title_text.windowToken, 0)
+    }
+
+    fun showKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }
 }
