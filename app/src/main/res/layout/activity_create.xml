@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_color"
+    android:fillViewport="true"
     android:padding="10dp">
 
     <android.support.v7.widget.CardView
@@ -92,12 +93,18 @@
                 <!--android:layout_height="0dp"-->
                 <!--android:layout_weight="1" />-->
 
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/spinner_simple"
+                <SeekBar
+                    android:id="@+id/seekBar"
                     android:layout_width="0dp"
-                    android:gravity="center"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
+
+                <!--<android.support.v7.widget.AppCompatSpinner-->
+                <!--android:id="@+id/spinner_simple"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1" />-->
             </LinearLayout>
 
             <LinearLayout
@@ -114,15 +121,9 @@
                     android:text="@string/category_achievable"
                     android:textColor="@color/black" />
 
-                <!--<View-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1" />-->
-
-                <Spinner
-                    android:id="@+id/spinner_achievable"
+                <SeekBar
+                    android:id="@+id/seek_achieve"
                     android:layout_width="0dp"
-                    android:gravity="center"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
             </LinearLayout>
@@ -141,13 +142,8 @@
                     android:text="@string/category_dev_diff"
                     android:textColor="@color/black" />
 
-                <!--<View-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1" />-->
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/spinner_dev_diff"
+                <SeekBar
+                    android:id="@+id/seek_dev_dff"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
@@ -167,13 +163,8 @@
                     android:text="@string/category_everyday"
                     android:textColor="@color/black" />
 
-                <!--<View-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1" />-->
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/spinner_everyday"
+                <SeekBar
+                    android:id="@+id/seek_everyday"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
@@ -193,13 +184,8 @@
                     android:text="@string/category_everyone"
                     android:textColor="@color/black" />
 
-                <!--<View-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1" />-->
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/spinner_everyone"
+                <SeekBar
+                    android:id="@+id/seek_everyone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
@@ -207,4 +193,4 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-</FrameLayout>
+</ScrollView>

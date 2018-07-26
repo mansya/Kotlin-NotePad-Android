@@ -49,15 +49,15 @@ class CreateActivity : AppCompatActivity() {
 
     private fun setSpinners() {
         // Create an ArrayAdapter using a simple spinner layout and languages array
-        val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, list_of_items)
-        // Set layout to use when the list of choices appear
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, list_of_items)
+//        // Set layout to use when the list of choices appear
+//        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Set Adapter to Spinner
-        spinner_achievable!!.adapter = aa
-        spinner_dev_diff!!.adapter = aa
-        spinner_everyday!!.adapter = aa
-        spinner_everyone!!.adapter = aa
-        spinner_simple!!.adapter = aa
+//        spinner_achievable!!.adapter = aa
+//        spinner_dev_diff!!.adapter = aa
+//        spinner_everyday!!.adapter = aa
+//        spinner_everyone!!.adapter = aa
+//        spinner_simple!!.adapter = aa
     }
 
     private fun getNotFromDB(note: Note) {
