@@ -1,6 +1,7 @@
 package com.freeankit.freenotepad.view
 
 import android.content.Context
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
@@ -20,8 +21,10 @@ class NotesAdapter(private val context: Context, private val listener: OnPlaceCl
         holder.itemView.title_text_.text = note.title
         holder.itemView.text_.text = note.text
         holder.itemView.content.setOnClickListener {
-            listener.onItemClicked(note)
+            listener.onItemClicked(note, holder.itemView.content)
         }
+
+        ViewCompat.setTransitionName(holder.itemView.content, "robot")
 
 //        //rlm is RecyclerView.LayoutManager passed in constructor or setter in adapter
 //        if (layoutManager is StaggeredGridLayoutManager) {
@@ -62,7 +65,7 @@ class NotesAdapter(private val context: Context, private val listener: OnPlaceCl
 
 
     interface OnPlaceClickListener {
-        fun onItemClicked(project: Note)
+        fun onItemClicked(project: Note, sharedView: View)
     }
 
 

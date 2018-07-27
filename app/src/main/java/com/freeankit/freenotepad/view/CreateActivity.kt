@@ -1,14 +1,20 @@
 package com.freeankit.freenotepad.view
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.model.Note
 import com.google.firebase.database.DataSnapshot
@@ -24,7 +30,6 @@ import java.util.*
  */
 class CreateActivity : AppCompatActivity() {
     private var id: Note? = null
-    private var list_of_items = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
 
     companion object {
         operator fun get(context: Context): Intent {
@@ -35,6 +40,10 @@ class CreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            root.transitionName = "robot"
+        } else {
+        }
         initToolbar()
         if (intent.hasExtra("id")) {
             id = intent.extras["id"] as Note
@@ -50,14 +59,13 @@ class CreateActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         setSupportActionBar(action_bar_)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         (action_bar_ as Toolbar).setContentInsetsAbsolute(0, 0)
         (action_bar_ as Toolbar).drawingCacheBackgroundColor = applicationContext!!.resources.getColor(R.color.white)
-//        whitesetToolbarColor(resources.getColor(R.color.colorPrimary))
-//        initDrawer()
-
         fab_.setOnClickListener {
             save()
-            finish()
+            onBackPressed()
         }
     }
 
@@ -121,6 +129,7 @@ class CreateActivity : AppCompatActivity() {
                     for (appleSnapshot in dataSnapshot.children) {
                         appleSnapshot.ref.removeValue()
                     }
+                    showSnackbar("Deleted idea")
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -128,7 +137,10 @@ class CreateActivity : AppCompatActivity() {
                 }
             })
         }
-        finish()
+
+        Handler().postDelayed({
+            onBackPressed()
+        }, 300)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -138,7 +150,9 @@ class CreateActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-
+            android.R.id.home -> {
+                onBackPressed()
+            }
             R.id.action_delete -> {
                 deleteThisNote()
             }
@@ -147,14 +161,26 @@ class CreateActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun hideKeyboard() {
-        val imm: InputMethodManager = getSystemService(
-                Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(title_text.windowToken, 0)
-    }
 
-    private fun showKeyboard() {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-    }
+}
+
+fun Activity.showSnackbar(message: String) {
+    val sb = Snackbar.make(findViewById<View>(android.R.id.content), message, Snackbar.LENGTH_SHORT)
+    val sbView = sb.view
+    sbView.setBackgroundColor(applicationContext?.resources?.getColor(R.color.colorAccent) as Int)
+    val textView = sbView.findViewById<View>(android.support.design.R.id.snackbar_text) as TextView
+    textView.setTextColor(applicationContext?.resources?.getColor(R.color.white) as Int)
+    sb.show()
+
+}
+
+fun Activity.hideKeyboard() {
+    val imm: InputMethodManager = getSystemService(
+            Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(title_text.windowToken, 0)
+}
+
+fun Activity.showKeyboard() {
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 }

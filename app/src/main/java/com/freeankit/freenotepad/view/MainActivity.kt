@@ -1,7 +1,13 @@
+@file:Suppress("DEPRECATION")
+
 package com.freeankit.freenotepad.view
 
+import android.app.ActivityOptions
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.content.ContextCompat.startActivity
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -9,6 +15,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.helper.SpaceItemDecoration
 import com.freeankit.freenotepad.model.Note
@@ -25,9 +32,19 @@ import kotlinx.android.synthetic.main.content_main.*
  */
 class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
 
-    override fun onItemClicked(project: Note) {
+    override fun onItemClicked(project: Note, sharedView: View) {
         Handler().postDelayed({
-            startActivity(CreateActivity[this].putExtra("id", project))
+            // Check if we're running on Android 5.0 or higher
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // get the element that receives the click event // get the common element for the transition in this activity
+                val options = ActivityOptions
+                        .makeSceneTransitionAnimation(this, sharedView, ViewCompat.getTransitionName(sharedView))
+//                startActivity(CreateActivity[this].putExtra("id", project), ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+                startActivity(CreateActivity[this].putExtra("id", project), options.toBundle())
+            } else {
+                startActivity(CreateActivity[this].putExtra("id", project))
+
+            }
         }, 150)
     }
 
@@ -64,14 +81,8 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
      */
     private fun initToolbar() {
         setSupportActionBar(action_bar)
-//        action_bar.setDisplayHomeAsUpEnabled(true)
-//        action_bar.setDisplayShowHomeEnabled(true)
-//        action_bar.setDisplayShowCustomEnabled(true)
-//        action_bar.setDisplayShowTitleEnabled(true)
         (action_bar as Toolbar).setContentInsetsAbsolute(0, 0)
         (action_bar as Toolbar).drawingCacheBackgroundColor = applicationContext!!.resources.getColor(R.color.white)
-//        whitesetToolbarColor(resources.getColor(R.color.colorPrimary))
-//        initDrawer()
     }
 
 
@@ -97,40 +108,6 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
         })
 
     }
-
-//    override fun onStart() {
-//        super.onStart()
-//
-//        val database = FirebaseDatabase.getInstance()
-//        val myRef = database.getReference("Ideas").child("note")
-//        myRef.addChildEventListener(object : ChildEventListener {
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.e("Error", "postMessages:onCancelled", databaseError.toException())
-//                Toast.makeText(baseContext, "Failed to load Message.", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onChildMoved(dataSnapshot: DataSnapshot, p1: String?) {
-//
-//            }
-//
-//            override fun onChildChanged(dataSnapshot: DataSnapshot, p1: String?) {
-//                val message = dataSnapshot.getValue(Note::class.java)
-//            }
-//
-//            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                val message = dataSnapshot.getValue(Note::class.java)
-////                message?.let { noteList.add(it) }
-//                message?.let { (recycler.adapter as NotesAdapter).addNote(it) }
-//            }
-//
-//            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-//                val message = dataSnapshot.getValue(Note::class.java)
-//            }
-//        })
-//
-//
-//    }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)

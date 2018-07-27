@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
+    android:id="@+id/content"
+    android:clickable="true"
     android:layout_margin="5dp"
     android:background="@color/white"
     android:foregroundGravity="center_horizontal"
@@ -12,12 +14,10 @@
     app:layout_anchorGravity="center_horizontal">
 
     <LinearLayout
-        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="?selectableItemBackground"
-        android:clickable="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="10dp">
