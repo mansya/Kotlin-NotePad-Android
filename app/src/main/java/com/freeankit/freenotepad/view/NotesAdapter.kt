@@ -30,11 +30,19 @@ class NotesAdapter(private val context: Context, private val listener: OnPlaceCl
         if (isCircled) {
             (holder.itemView.content as CardView).radius = 100F
             holder.itemView.title_text_.maxLines = 3
-            holder.itemView.text_.visibility = View.GONE
+            if (note.title.isNullOrEmpty()) {
+                holder.itemView.text_.visibility = View.VISIBLE
+                holder.itemView.title_text_.visibility = View.GONE
+            } else {
+                holder.itemView.text_.visibility = View.GONE
+                holder.itemView.title_text_.visibility = View.VISIBLE
+            }
+
         } else {
             (holder.itemView.content as CardView).radius = 0F
             holder.itemView.title_text_.maxLines = 1
             holder.itemView.text_.visibility = View.VISIBLE
+            holder.itemView.title_text_.visibility = View.VISIBLE
         }
     }
 
