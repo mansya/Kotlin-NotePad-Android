@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.freeankit.freenotepad.R
+import com.freeankit.freenotepad.model.DataHolder
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -31,6 +32,10 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+//        if (DataHolder.getInstance(applicationContext).isVerified) {
+//            startActivity(Intent(baseContext, MainActivity::class.java))
+//            finish()
+//        } else {
 
         // [START config_signin]
         // Configure Google Sign In
@@ -47,6 +52,11 @@ class LoginActivity : AppCompatActivity() {
         // [END initialize_auth]
 
         sign_in_button.setOnClickListener { signIn() }
+        skip.setOnClickListener {
+            startActivity(Intent(baseContext, MainActivity::class.java))
+            finish()
+        }
+//        }
     }
 
     override fun onStart() {
@@ -85,6 +95,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
+            DataHolder.getInstance(applicationContext).uid = user.uid
+            DataHolder.getInstance(applicationContext).isVerified = true
+            DataHolder.getInstance(applicationContext).save(applicationContext)
             startActivity(Intent(baseContext, MainActivity::class.java))
             finish()
         } else {

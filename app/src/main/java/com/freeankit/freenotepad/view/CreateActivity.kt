@@ -17,6 +17,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.freeankit.freenotepad.R
+import com.freeankit.freenotepad.model.DataHolder
 import com.freeankit.freenotepad.model.Note
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -88,8 +89,10 @@ class CreateActivity : AppCompatActivity() {
 
     private fun saveNote() {
         val note = Note()
+        note.uid = DataHolder.getInstance(applicationContext).uid
         note.text = edit_text.text.toString()
         note.title = title_text.text.toString()
+
         if (!note.title.isNullOrEmpty() || !note.text.isNullOrEmpty())
             saveDataToFirebase(note)
     }
@@ -112,35 +115,47 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun updateDataToFirebase(note: Note) {
-        val database = FirebaseDatabase.getInstance()
-        val ideasDB = database.getReference("Ideas")
-        val noteValues: Map<String, Any> = note.toMap()
-        val childUpdates = HashMap<String, Any>()
-        childUpdates["/note/${note.id}"] = noteValues
-        ideasDB.updateChildren(childUpdates)
+        if (DataHolder.getInstance(applicationContext).isVerified && note.id == DataHolder.getInstance(applicationContext).uid) {
+            val database = FirebaseDatabase.getInstance()
+            val ideasDB = database.getReference("Ideas")
+            val noteValues: Map<String, Any> = note.toMap()
+            val childUpdates = HashMap<String, Any>()
+            childUpdates["/note/${note.id}"] = noteValues
+            ideasDB.updateChildren(childUpdates)
+            onBackPressed()
+        } else {
+            Handler().postDelayed({
+                showSnackbar("Please login to update Ideas")
+            }, 300)
+        }
     }
 
     private fun deleteThisNote() {
-        if (id != null) {
-            val database = FirebaseDatabase.getInstance()
-            val deleteQuery = database.getReference("Ideas").child("note").orderByChild("title").equalTo(id?.title)
-            deleteQuery.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (appleSnapshot in dataSnapshot.children) {
-                        appleSnapshot.ref.removeValue()
+        if (DataHolder.getInstance(applicationContext).isVerified) {
+            if (id != null && id?.uid == DataHolder.getInstance(applicationContext).uid) {
+                val database = FirebaseDatabase.getInstance()
+                val deleteQuery = database.getReference("Ideas").child("note").orderByChild("title").equalTo(id?.title)
+                deleteQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (appleSnapshot in dataSnapshot.children) {
+                            appleSnapshot.ref.removeValue()
+                        }
+                        showSnackbar("Deleted idea")
                     }
-                    showSnackbar("Deleted idea")
-                }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e("Del", "onCancelled", databaseError.toException())
-                }
-            })
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.e("Del", "onCancelled", databaseError.toException())
+                    }
+                })
+                Handler().postDelayed({
+                    onBackPressed()
+                }, 300)
+            } else {
+                showSnackbar("You are allowed to delete only your Idea")
+            }
+        } else {
+            showSnackbar("Please login to delete Ideas")
         }
-
-        Handler().postDelayed({
-            onBackPressed()
-        }, 300)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

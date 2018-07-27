@@ -12,8 +12,8 @@ import java.io.Serializable
 data class Note(var id: String = "",
                 var text: String? = null,
                 var title: String? = null,
-                var isPinned: Boolean = false) : Serializable {
-
+                var isPinned: Boolean = false,
+                var uid: String? = null) : Serializable {
 
     @Exclude
     fun toMap(): Map<String, Any> {
@@ -22,6 +22,7 @@ data class Note(var id: String = "",
         text?.let { result.put("text", it) }
         title?.let { result.put("title", it) }
         result["isPinned"] = isPinned
+        uid?.let { result.put("uid", it) }
         return result
     }
 

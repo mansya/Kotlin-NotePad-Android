@@ -17,6 +17,7 @@ import android.view.MenuItem
 import android.view.View
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.helper.SpaceItemDecoration
+import com.freeankit.freenotepad.model.DataHolder
 import com.freeankit.freenotepad.model.Note
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -54,6 +55,8 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
         switchView()
         fab.setOnClickListener { startActivity(CreateActivity[this]) }
         initToolbar()
+        Log.d("User V", DataHolder.getInstance(applicationContext).isVerified.toString())
+        Log.d("User I", DataHolder.getInstance(applicationContext).uid)
     }
 
 
