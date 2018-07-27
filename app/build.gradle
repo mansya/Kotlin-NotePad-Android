@@ -7,6 +7,16 @@ apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 28
+    signingConfigs {
+        release {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+            storeFile file("/Users/ankitkumar/Ankit/ProData/Idea/JKS/idea.jks")
+            storePassword properties.getProperty("store.password")
+            keyAlias "idea"
+            keyPassword properties.getProperty("key.password")
+        }
+    }
     defaultConfig {
         applicationId "com.freeankit.freenotepad"
         minSdkVersion 19
@@ -17,8 +27,12 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -53,6 +67,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation 'com.google.firebase:firebase-auth:16.0.2'
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
