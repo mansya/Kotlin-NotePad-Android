@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
@@ -42,18 +43,15 @@ class CreateActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             root.transitionName = "robot"
-        } else {
         }
-        initToolbar()
+
         if (intent.hasExtra("id")) {
             id = intent.extras["id"] as Note
         }
         if (id != null) {
-            hideKeyboard()
             getNotFromDB(id!!)
-        } else {
-            showKeyboard()
         }
+        initToolbar()
     }
 
 
@@ -63,6 +61,10 @@ class CreateActivity : AppCompatActivity() {
 
         (action_bar_ as Toolbar).setContentInsetsAbsolute(0, 0)
         (action_bar_ as Toolbar).drawingCacheBackgroundColor = applicationContext!!.resources.getColor(R.color.white)
+
+        (supportActionBar as ActionBar).title = id?.title ?: "New Idea"
+        action_bar_.setTitleTextColor(resources.getColor(R.color.white))
+
         fab_.setOnClickListener {
             save()
             onBackPressed()
@@ -71,10 +73,8 @@ class CreateActivity : AppCompatActivity() {
 
 
     private fun getNotFromDB(note: Note) {
-        //val note = DataStore.notes.byId(id)
         edit_text.setText(note.text)
         title_text.setText(note.title)
-
     }
 
 

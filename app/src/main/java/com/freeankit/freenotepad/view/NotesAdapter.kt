@@ -1,7 +1,9 @@
 package com.freeankit.freenotepad.view
 
 import android.content.Context
+import android.opengl.Visibility
 import android.support.v4.view.ViewCompat
+import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
@@ -14,7 +16,7 @@ import kotlinx.android.synthetic.main.item_note.view.*
 /**
  * @author Ankit Kumar (ankitdroiddeveloper@gmail.com) on 20/12/2017 (MM/DD/YYYY )
  */
-class NotesAdapter(private val context: Context, private val listener: OnPlaceClickListener, val layoutManager: RecyclerView.LayoutManager) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+class NotesAdapter(private val context: Context, private val listener: OnPlaceClickListener, private val isCircled: Boolean) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
     private var notes: MutableList<Note> = ArrayList()
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         val note = notes[position]
@@ -23,18 +25,17 @@ class NotesAdapter(private val context: Context, private val listener: OnPlaceCl
         holder.itemView.content.setOnClickListener {
             listener.onItemClicked(note, holder.itemView.content)
         }
-
         ViewCompat.setTransitionName(holder.itemView.content, "robot")
 
-//        //rlm is RecyclerView.LayoutManager passed in constructor or setter in adapter
-//        if (layoutManager is StaggeredGridLayoutManager) {
-//            val layoutParams = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
-//            /*
-//     * to make View to occupy full width of the parent
-//     */
-//            layoutParams.isFullSpan = true
-//        }
-
+        if (isCircled) {
+            (holder.itemView.content as CardView).radius = 100F
+            holder.itemView.title_text_.maxLines = 3
+            holder.itemView.text_.visibility = View.GONE
+        } else {
+            (holder.itemView.content as CardView).radius = 0F
+            holder.itemView.title_text_.maxLines = 1
+            holder.itemView.text_.visibility = View.VISIBLE
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {

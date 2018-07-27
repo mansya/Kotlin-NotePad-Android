@@ -6,7 +6,6 @@ import android.app.ActivityOptions
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -31,6 +30,7 @@ import kotlinx.android.synthetic.main.content_main.*
  * @author Ankit Kumar (ankitdroiddeveloper@gmail.com) on 20/12/2017 (MM/DD/YYYY )
  */
 class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
+    var isCircled: Boolean = false
 
     override fun onItemClicked(project: Note, sharedView: View) {
         Handler().postDelayed({
@@ -51,38 +51,25 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val slm = StaggeredGridLayoutManager(2, 1)
-//        val slm = GridLayoutManager(this, 2)
-
-        recycler.layoutManager = slm
-        recycler.addItemDecoration(SpaceItemDecoration(this, R.dimen.margin_small))
-        recycler.adapter = NotesAdapter(this, this, slm)
+        switchView()
         fab.setOnClickListener { startActivity(CreateActivity[this]) }
         initToolbar()
     }
 
-    override fun onResume() {
-        super.onResume()
-        refresh()
-    }
-
-    public override fun onDestroy() {
-        super.onDestroy()
-
-    }
-
-    private fun refresh() {
-        loadNotes()
-
-    }
 
     /**
      * Initializes toolbar
      */
     private fun initToolbar() {
         setSupportActionBar(action_bar)
-        (action_bar as Toolbar).setContentInsetsAbsolute(0, 0)
+//        (supportActionBar as ActionBar).setDisplayHomeAsUpEnabled(false)
+        (supportActionBar as ActionBar).setDisplayShowHomeEnabled(true)
+        (supportActionBar as ActionBar).setDisplayShowCustomEnabled(true)
+        (supportActionBar as ActionBar).setDisplayShowTitleEnabled(true)
+        (action_bar as Toolbar).setContentInsetsAbsolute(50, 0)
         (action_bar as Toolbar).drawingCacheBackgroundColor = applicationContext!!.resources.getColor(R.color.white)
+        (supportActionBar as ActionBar).title = "Ideas"
+        action_bar.setTitleTextColor(resources.getColor(R.color.white))
     }
 
 
@@ -117,10 +104,27 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> {
-
+                recycler.adapter = null
+                switchView()
             }
             else -> return super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun switchView() {
+        if (isCircled) {
+            val slm = StaggeredGridLayoutManager(3, 1)
+            recycler.layoutManager = slm
+            recycler.addItemDecoration(SpaceItemDecoration(this, R.dimen.margin_small))
+            recycler.adapter = NotesAdapter(this, this, isCircled)
+        } else {
+            val slm = StaggeredGridLayoutManager(2, 1)
+            recycler.layoutManager = slm
+            recycler.addItemDecoration(SpaceItemDecoration(this, R.dimen.margin_small))
+            recycler.adapter = NotesAdapter(this, this, isCircled)
+        }
+        isCircled = !isCircled
+        loadNotes()
     }
 }
