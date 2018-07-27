@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.model.Note
 import com.google.firebase.database.DataSnapshot
@@ -35,30 +35,32 @@ class CreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
+        initToolbar()
         if (intent.hasExtra("id")) {
             id = intent.extras["id"] as Note
         }
         if (id != null) {
-            hideKeybaord()
+            hideKeyboard()
             getNotFromDB(id!!)
         } else {
             showKeyboard()
         }
-        setSpinners()
     }
 
-    private fun setSpinners() {
-        // Create an ArrayAdapter using a simple spinner layout and languages array
-//        val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, list_of_items)
-//        // Set layout to use when the list of choices appear
-//        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Set Adapter to Spinner
-//        spinner_achievable!!.adapter = aa
-//        spinner_dev_diff!!.adapter = aa
-//        spinner_everyday!!.adapter = aa
-//        spinner_everyone!!.adapter = aa
-//        spinner_simple!!.adapter = aa
+
+    private fun initToolbar() {
+        setSupportActionBar(action_bar_)
+        (action_bar_ as Toolbar).setContentInsetsAbsolute(0, 0)
+        (action_bar_ as Toolbar).drawingCacheBackgroundColor = applicationContext!!.resources.getColor(R.color.white)
+//        whitesetToolbarColor(resources.getColor(R.color.colorPrimary))
+//        initDrawer()
+
+        fab_.setOnClickListener {
+            save()
+            finish()
+        }
     }
+
 
     private fun getNotFromDB(note: Note) {
         //val note = DataStore.notes.byId(id)
@@ -136,10 +138,7 @@ class CreateActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_accept -> {
-                save()
-                finish()
-            }
+
             R.id.action_delete -> {
                 deleteThisNote()
             }
@@ -148,13 +147,13 @@ class CreateActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun hideKeybaord() {
+    private fun hideKeyboard() {
         val imm: InputMethodManager = getSystemService(
                 Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(title_text.windowToken, 0)
     }
 
-    fun showKeyboard() {
+    private fun showKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }

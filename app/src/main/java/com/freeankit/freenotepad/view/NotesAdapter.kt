@@ -2,6 +2,7 @@ package com.freeankit.freenotepad.view
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.view.ViewGroup
 import com.freeankit.freenotepad.R
@@ -12,7 +13,7 @@ import kotlinx.android.synthetic.main.item_note.view.*
 /**
  * @author Ankit Kumar (ankitdroiddeveloper@gmail.com) on 20/12/2017 (MM/DD/YYYY )
  */
-class NotesAdapter(private val context: Context, private val listener: NotesAdapter.OnPlaceClickListener) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+class NotesAdapter(private val context: Context, private val listener: OnPlaceClickListener, val layoutManager: RecyclerView.LayoutManager) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
     private var notes: MutableList<Note> = ArrayList()
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         val note = notes[position]
@@ -21,6 +22,15 @@ class NotesAdapter(private val context: Context, private val listener: NotesAdap
         holder.itemView.content.setOnClickListener {
             listener.onItemClicked(note)
         }
+
+//        //rlm is RecyclerView.LayoutManager passed in constructor or setter in adapter
+//        if (layoutManager is StaggeredGridLayoutManager) {
+//            val layoutParams = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
+//            /*
+//     * to make View to occupy full width of the parent
+//     */
+//            layoutParams.isFullSpan = true
+//        }
 
     }
 

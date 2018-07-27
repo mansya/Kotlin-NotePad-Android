@@ -2,8 +2,10 @@ package com.freeankit.freenotepad.view
 
 import android.os.Bundle
 import android.os.Handler
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.StaggeredGridLayoutManager
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -32,11 +34,14 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val slm = StaggeredGridLayoutManager(2, 1)
+//        val slm = GridLayoutManager(this, 2)
 
-        recycler.layoutManager = GridLayoutManager(this, 2)
+        recycler.layoutManager = slm
         recycler.addItemDecoration(SpaceItemDecoration(this, R.dimen.margin_small))
-        recycler.adapter = NotesAdapter(this, this)
+        recycler.adapter = NotesAdapter(this, this, slm)
         fab.setOnClickListener { startActivity(CreateActivity[this]) }
+        initToolbar()
     }
 
     override fun onResume() {
@@ -52,6 +57,21 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
     private fun refresh() {
         loadNotes()
 
+    }
+
+    /**
+     * Initializes toolbar
+     */
+    private fun initToolbar() {
+        setSupportActionBar(action_bar)
+//        action_bar.setDisplayHomeAsUpEnabled(true)
+//        action_bar.setDisplayShowHomeEnabled(true)
+//        action_bar.setDisplayShowCustomEnabled(true)
+//        action_bar.setDisplayShowTitleEnabled(true)
+        (action_bar as Toolbar).setContentInsetsAbsolute(0, 0)
+        (action_bar as Toolbar).drawingCacheBackgroundColor = applicationContext!!.resources.getColor(R.color.white)
+//        whitesetToolbarColor(resources.getColor(R.color.colorPrimary))
+//        initDrawer()
     }
 
 
