@@ -12,5 +12,6 @@
     <string name="category_everyday">Everyday Use</string>
     <string name="category_everyone">Everyone Use</string>
     <string name="dots">...........</string>
+    <string name="overall_rating">Average Ratings</string>
     <!--<string name="default_web_client_id">532428107486-jarbq6395p8fe54njjfabblamh87n80d.apps.googleusercontent.com</string>-->
 </resources>

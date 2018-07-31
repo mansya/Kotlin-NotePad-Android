@@ -20,4 +20,6 @@ var PREF_FILE_CONFIG: String = "PREF_FILE_CONFIG"
 var EXTRA_KEY_USER: String = "EXTRA_KEY_USER"
 var FCM_TOKEN: String = "FCM_TOKEN"
 var FIRTIME: String = "FIRTIME"
-val TAG = "JrnieApp"
+
+val TAG = "Ideas"
+val RC_SIGN_IN = 9001

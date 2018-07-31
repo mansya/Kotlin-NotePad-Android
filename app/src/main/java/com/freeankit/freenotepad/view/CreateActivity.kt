@@ -1,22 +1,18 @@
 package com.freeankit.freenotepad.view
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.Snackbar
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import com.freeankit.freenotepad.R
+import com.freeankit.freenotepad.helper.showSnackbar
 import com.freeankit.freenotepad.model.DataHolder
 import com.freeankit.freenotepad.model.Note
 import com.google.firebase.database.DataSnapshot
@@ -70,8 +66,12 @@ class CreateActivity : AppCompatActivity() {
             save()
             onBackPressed()
         }
+        initSeekBars()
     }
 
+    private fun initSeekBars() {
+        seek_overall_rating.isEnabled = false
+    }
 
     private fun getNotFromDB(note: Note) {
         edit_text.setText(note.text)
@@ -115,7 +115,9 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun updateDataToFirebase(note: Note) {
-        if (DataHolder.getInstance(applicationContext).isVerified && note.id == DataHolder.getInstance(applicationContext).uid) {
+        if (DataHolder.getInstance(applicationContext).isVerified
+                && (note.id == DataHolder.getInstance(applicationContext).uid)
+                || note.id == "") {
             val database = FirebaseDatabase.getInstance()
             val ideasDB = database.getReference("Ideas")
             val noteValues: Map<String, Any> = note.toMap()
@@ -177,25 +179,4 @@ class CreateActivity : AppCompatActivity() {
     }
 
 
-}
-
-fun Activity.showSnackbar(message: String) {
-    val sb = Snackbar.make(findViewById<View>(android.R.id.content), message, Snackbar.LENGTH_SHORT)
-    val sbView = sb.view
-    sbView.setBackgroundColor(applicationContext?.resources?.getColor(R.color.colorAccent) as Int)
-    val textView = sbView.findViewById<View>(android.support.design.R.id.snackbar_text) as TextView
-    textView.setTextColor(applicationContext?.resources?.getColor(R.color.white) as Int)
-    sb.show()
-
-}
-
-fun Activity.hideKeyboard() {
-    val imm: InputMethodManager = getSystemService(
-            Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(title_text.windowToken, 0)
-}
-
-fun Activity.showKeyboard() {
-    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 }

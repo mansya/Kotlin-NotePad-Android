@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.freeankit.freenotepad.R
+import com.freeankit.freenotepad.helper.RC_SIGN_IN
+import com.freeankit.freenotepad.helper.TAG
+import com.freeankit.freenotepad.helper.showSnackbar
 import com.freeankit.freenotepad.model.DataHolder
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -21,9 +24,6 @@ import kotlinx.android.synthetic.main.activity_login.*
  * @author Ankit Kumar on 27/07/2018
  */
 class LoginActivity : AppCompatActivity() {
-
-    private val TAG = "GoogleActivity"
-    private val RC_SIGN_IN = 9001
 
     private var mGoogleSignInClient: GoogleSignInClient? = null
 
@@ -101,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(baseContext, MainActivity::class.java))
             finish()
         } else {
-            showSnackbar("Please try again")
+//            showSnackbar("Please try again")
         }
     }
     // [END auth_with_google]
