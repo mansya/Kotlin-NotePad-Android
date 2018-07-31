@@ -11,7 +11,7 @@ android {
         release {
             Properties properties = new Properties()
             properties.load(project.rootProject.file('local.properties').newDataInputStream())
-            storeFile file("/Users/ankitkumar/Ankit/ProData/Idea/JKS/idea")
+            storeFile file(properties.getProperty("jks.path"))
             storePassword properties.getProperty("store.password")
             keyAlias "idea"
             keyPassword properties.getProperty("key.password")

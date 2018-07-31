@@ -28,7 +28,7 @@ class TextThumbSeekBar : SeekBar {
         mThumbSize = context.resources.getDimensionPixelSize(R.dimen.thumb_size)
 
         mTextPaint = TextPaint()
-        mTextPaint?.color = Color.WHITE
+        mTextPaint?.color = context.resources.getColor(R.color.colorAccent)
         mTextPaint?.textSize = context.resources.getDimensionPixelSize(R.dimen.thumb_text_size).toFloat()
         mTextPaint?.typeface = Typeface.DEFAULT_BOLD
         mTextPaint?.textAlign = Paint.Align.CENTER
@@ -46,7 +46,7 @@ class TextThumbSeekBar : SeekBar {
         val leftPadding = paddingLeft - thumbOffset
         val rightPadding = paddingRight - thumbOffset
         val width = width - leftPadding - rightPadding
-        val progressRatio = progress as Float / max
+        val progressRatio = progress / max
         val thumbOffset = mThumbSize * (.5f - progressRatio)
         val thumbX = progressRatio * width + leftPadding.toFloat() + thumbOffset
         val thumbY = height / 2f + bounds.height() / 2f
