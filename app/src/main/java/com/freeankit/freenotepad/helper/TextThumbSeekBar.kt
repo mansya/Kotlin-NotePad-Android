@@ -26,9 +26,8 @@ class TextThumbSeekBar : SeekBar {
 
     init {
         mThumbSize = context.resources.getDimensionPixelSize(R.dimen.thumb_size)
-
         mTextPaint = TextPaint()
-        mTextPaint?.color = context.resources.getColor(R.color.colorAccent)
+        mTextPaint?.color = context.resources.getColor(R.color.colorPrimary)
         mTextPaint?.textSize = context.resources.getDimensionPixelSize(R.dimen.thumb_text_size).toFloat()
         mTextPaint?.typeface = Typeface.DEFAULT_BOLD
         mTextPaint?.textAlign = Paint.Align.CENTER
@@ -38,8 +37,22 @@ class TextThumbSeekBar : SeekBar {
     @Synchronized
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        when {
+            progress < 40 -> {
+                mTextPaint?.color = context.resources.getColor(R.color.red)
+//                canvas.draw(context.resources.getColor(R.color.red))
+            }
+            progress in 40..70 -> {
+                mTextPaint?.color = context.resources.getColor(R.color.colorPrimary)
+//                canvas.drawColor(context.resources.getColor(R.color.colorPrimary))
+            }
+            else -> {
+                mTextPaint?.color = context.resources.getColor(R.color.green)
+//                canvas.drawColor(context.resources.getColor(R.color.green))
+            }
+        }
 
-        val progressText = progress.toString()
+        val progressText = (progress / 10).toString()
         val bounds = Rect()
         mTextPaint?.getTextBounds(progressText, 0, progressText.length, bounds)
 
@@ -47,9 +60,9 @@ class TextThumbSeekBar : SeekBar {
         val rightPadding = paddingRight - thumbOffset
         val width = width - leftPadding - rightPadding
         val progressRatio = progress / max
-        val thumbOffset = mThumbSize * (.5f - progressRatio)
+        val thumbOffset = mThumbSize * (0.5f - progressRatio)
         val thumbX = progressRatio * width + leftPadding.toFloat() + thumbOffset
         val thumbY = height / 2f + bounds.height() / 2f
-        canvas.drawText(progressText, thumbX, thumbY, mTextPaint)
+        canvas.drawText(progressText, 0, progressText.length, thumbX, thumbY, mTextPaint)
     }
 }
