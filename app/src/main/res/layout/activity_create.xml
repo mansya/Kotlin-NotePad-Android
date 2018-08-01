@@ -63,6 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:id="@+id/dots"
                     android:text="@string/dots"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold" />
@@ -91,7 +92,7 @@
                         android:textColor="@color/black" />
 
 
-                    <com.freeankit.freenotepad.helper.TextThumbSeekBar
+                    <com.freeankit.freenotepad.helper.CustomSeekbar
                         android:id="@+id/seekBar"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

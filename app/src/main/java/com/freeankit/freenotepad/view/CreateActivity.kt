@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.RelativeLayout
+import android.widget.SeekBar
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.helper.showSnackbar
 import com.freeankit.freenotepad.model.DataHolder
@@ -70,6 +72,31 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun initSeekBars() {
+        seekBar.max = 10
+        seekBar.progress = 0
+//        seekBar.thumb = this.resources.getDrawable(
+//                R.drawable.ic_search)
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
+//                val p = RelativeLayout.LayoutParams(
+//                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+//                        RelativeLayout.LayoutParams.WRAP_CONTENT)
+//                p.addRule(RelativeLayout.ABOVE, seek.id)
+//                val thumbRect = seekBar.getSeekbarThumb()?.bounds
+//                thumbRect?.centerX()?.let {
+//                    p.setMargins(
+//                            it, 0, 0, 0)
+//                }
+//                dots.layoutParams = p
+                dots.text = progress.toString()
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+            }
+        })
         seek_overall_rating.isEnabled = false
     }
 
