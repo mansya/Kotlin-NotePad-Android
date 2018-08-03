@@ -282,4 +282,6 @@
         android:src="@drawable/ic_check_white_24dp"
         android:tint="@color/white"
         tools:ignore="VectorDrawableCompat" />
+
+    <include layout="@layout/bottom_sheet" />
 </android.support.design.widget.CoordinatorLayout>

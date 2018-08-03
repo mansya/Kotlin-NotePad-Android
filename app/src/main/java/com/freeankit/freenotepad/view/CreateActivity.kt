@@ -5,12 +5,15 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.SeekBar
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.helper.showSnackbar
@@ -23,6 +26,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_create.*
 import java.util.*
 import com.freeankit.freenotepad.helper.TAG
+import kotlinx.android.synthetic.main.bottom_sheet.*
 
 
 /**
@@ -52,8 +56,32 @@ class CreateActivity : AppCompatActivity() {
             getNotFromDB(id!!)
         }
         initToolbar()
+
     }
 
+    private fun initBottomSheet() {
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+
+// change the state of the bottom sheet
+//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+// set the peek height
+        bottomSheetBehavior.peekHeight = 540
+
+// set hideable or not
+        bottomSheetBehavior.isHideable = false
+        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(p0: View, p1: Float) {
+
+            }
+
+            override fun onStateChanged(p0: View, p1: Int) {
+
+            }
+        })
+    }
 
     private fun initToolbar() {
         setSupportActionBar(action_bar_)
@@ -233,7 +261,7 @@ class CreateActivity : AppCompatActivity() {
                 deleteThisNote()
             }
             R.id.action_theme -> {
-
+                initBottomSheet()
             }
             else -> return super.onOptionsItemSelected(item)
         }
