@@ -232,6 +232,9 @@ class CreateActivity : AppCompatActivity() {
             R.id.action_delete -> {
                 deleteThisNote()
             }
+            R.id.action_theme -> {
+
+            }
             else -> return super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
