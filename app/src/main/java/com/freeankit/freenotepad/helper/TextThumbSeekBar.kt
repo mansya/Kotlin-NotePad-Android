@@ -37,6 +37,7 @@ class TextThumbSeekBar : SeekBar {
     @Synchronized
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
         when {
             progress < 40 -> {
                 mTextPaint?.color = context.resources.getColor(R.color.red)
