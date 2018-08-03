@@ -19,6 +19,7 @@ import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.helper.SpaceItemDecoration
 import com.freeankit.freenotepad.model.DataHolder
 import com.freeankit.freenotepad.model.Note
+import com.freeankit.freenotepad.view.adapters.NotesAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity(), NotesAdapter.OnPlaceClickListener {
                 // get the element that receives the click event // get the common element for the transition in this activity
                 val options = ActivityOptions
                         .makeSceneTransitionAnimation(this, sharedView, ViewCompat.getTransitionName(sharedView))
-//                startActivity(CreateActivity[this].putExtra("id", project), ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+                // startActivity(CreateActivity[this].putExtra("id", project), ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
                 startActivity(CreateActivity[this].putExtra("id", project), options.toBundle())
             } else {
                 startActivity(CreateActivity[this].putExtra("id", project))
