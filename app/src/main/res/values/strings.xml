@@ -14,5 +14,6 @@
     <string name="dots">.................................................................................</string>
     <string name="overall_rating">Average Ratings</string>
     <string name="category_selection_message">Category of your Idea</string>
+    <string name="color">Color</string>
     <!--<string name="default_web_client_id">532428107486-jarbq6395p8fe54njjfabblamh87n80d.apps.googleusercontent.com</string>-->
 </resources>

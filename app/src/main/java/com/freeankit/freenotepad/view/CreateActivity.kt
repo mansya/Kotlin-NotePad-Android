@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -16,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
 import com.freeankit.freenotepad.R
+import com.freeankit.freenotepad.helper.TAG
 import com.freeankit.freenotepad.helper.showSnackbar
 import com.freeankit.freenotepad.model.DataHolder
 import com.freeankit.freenotepad.model.Note
@@ -24,9 +24,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_create.*
-import java.util.*
-import com.freeankit.freenotepad.helper.TAG
 import kotlinx.android.synthetic.main.bottom_sheet.*
+import java.util.*
 
 
 /**
