@@ -16,6 +16,7 @@ import android.view.View
 import android.widget.SeekBar
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.helper.TAG
+import com.freeankit.freenotepad.helper.hideKeyboard
 import com.freeankit.freenotepad.helper.showSnackbar
 import com.freeankit.freenotepad.model.DataHolder
 import com.freeankit.freenotepad.model.Note
@@ -80,6 +81,12 @@ class CreateActivity : AppCompatActivity() {
 
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideKeyboard(title_text)
+        hideKeyboard(edit_text)
     }
 
     private fun initToolbar() {
