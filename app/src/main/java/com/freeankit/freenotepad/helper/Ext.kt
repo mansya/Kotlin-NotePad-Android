@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.freeankit.freenotepad.R
 import org.jetbrains.anko.contentView
+import java.util.*
 
 /**
  * @author Ankit Kumar on 31/07/2018
@@ -33,4 +34,8 @@ fun Activity.hideKeyboard() {
 fun Activity.showKeyboard() {
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+}
+
+fun Activity.getColorArray(context: Context): IntArray {
+    return context.resources.getIntArray(R.array.androidcolors)
 }

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Ideas</string>
     <string name="action_settings">Switch View</string>
-    <string name="start_typing">Your Idea</string>
+    <string name="start_typing">Description</string>
     <string name="title">Title</string>
     <string name="accept">Accept</string>
     <string name="delete">Delete</string>
@@ -11,7 +11,8 @@
     <string name="category_dev_diff">Development Difficulties</string>
     <string name="category_everyday">Everyday Use</string>
     <string name="category_everyone">Everyone Use</string>
-    <string name="dots">...........</string>
+    <string name="dots">.................................................................................</string>
     <string name="overall_rating">Average Ratings</string>
+    <string name="category_selection_message">Category of your Idea</string>
     <!--<string name="default_web_client_id">532428107486-jarbq6395p8fe54njjfabblamh87n80d.apps.googleusercontent.com</string>-->
 </resources>

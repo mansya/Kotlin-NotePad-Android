@@ -22,7 +22,7 @@
             android:layout_marginTop="25dp"
             android:gravity="center_vertical"
             app:elevation="5dp"
-            app:layout_scrollFlags="scroll" />
+            app:layout_scrollFlags="scroll|enterAlways" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton

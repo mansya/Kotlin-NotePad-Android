@@ -5,12 +5,15 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.SeekBar
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.helper.showSnackbar
@@ -22,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_create.*
 import java.util.*
+import com.freeankit.freenotepad.helper.TAG
+import kotlinx.android.synthetic.main.bottom_sheet.*
 
 
 /**
@@ -29,6 +34,7 @@ import java.util.*
  */
 class CreateActivity : AppCompatActivity() {
     private var id: Note? = null
+    private var isRated: Boolean = false
 
     companion object {
         operator fun get(context: Context): Intent {
@@ -42,16 +48,40 @@ class CreateActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             root.transitionName = "robot"
         }
-
         if (intent.hasExtra("id")) {
             id = intent.extras["id"] as Note
         }
         if (id != null) {
+            Log.d(TAG, id.toString())
             getNotFromDB(id!!)
         }
         initToolbar()
+
     }
 
+    private fun initBottomSheet() {
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+
+// change the state of the bottom sheet
+//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+// set the peek height
+        bottomSheetBehavior.peekHeight = 540
+
+// set hideable or not
+        bottomSheetBehavior.isHideable = false
+        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(p0: View, p1: Float) {
+
+            }
+
+            override fun onStateChanged(p0: View, p1: Int) {
+
+            }
+        })
+    }
 
     private fun initToolbar() {
         setSupportActionBar(action_bar_)
@@ -71,45 +101,54 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun initSeekBars() {
-        seekBar.max = 10
-        seekBar.progress = 0
-//        seekBar.thumb = this.resources.getDrawable(
-//                R.drawable.ic_search)
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
-//                val p = RelativeLayout.LayoutParams(
-//                        RelativeLayout.LayoutParams.WRAP_CONTENT,
-//                        RelativeLayout.LayoutParams.WRAP_CONTENT)
-//                p.addRule(RelativeLayout.ABOVE, seek.id)
-//                val thumbRect = seekBar.getSeekbarThumb()?.bounds
-//                thumbRect?.centerX()?.let {
-//                    p.setMargins(
-//                            it, 0, 0, 0)
-//                }
-//                dots.layoutParams = p
-                dots.text = progress.toString()
+        seek_overall_rating.isEnabled = false
+
+        seek_simple.setOnSeekBarChangeListener(seekbarListener())
+        seek_dev_dff.setOnSeekBarChangeListener(seekbarListener())
+        seek_achieve.setOnSeekBarChangeListener(seekbarListener())
+        seek_everyone.setOnSeekBarChangeListener(seekbarListener())
+        seek_everyday.setOnSeekBarChangeListener(seekbarListener())
+    }
+
+    private fun seekbarListener(): SeekBar.OnSeekBarChangeListener {
+        return object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                val progresss = (seek_simple.progress + seek_achieve.progress +
+                        seek_dev_dff.progress + seek_everyday.progress + seek_everyone.progress) / 5
+                seek_overall_rating.progress = progresss
+                isRated = true
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
+
             }
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
+
             }
-        })
-        seek_overall_rating.isEnabled = false
+        }
     }
 
     private fun getNotFromDB(note: Note) {
         edit_text.setText(note.text)
         title_text.setText(note.title)
+
+
+        seek_simple.progress = if (note.simple_rate != null) note.simple_rate!! else 0
+
+        seek_achieve.progress = if (note.achieve_rate != null) note.achieve_rate!! else 0
+        seek_dev_dff.progress = if (note.dev_difficulty_rate != null) note.dev_difficulty_rate!! else 0
+        seek_everyone.progress = if (note.everyone_rate != null) note.everyone_rate!! else 0
+        seek_everyday.progress = if (note.everyday_rate != null) note.everyday_rate!! else 0
+        seek_overall_rating.progress = if (note.overall_rate != null) note.overall_rate!! else 0
     }
 
 
     private fun save() {
-        if (id == null) {
-            saveNote()
-        } else {
-            updateNote()
+        when {
+            id == null -> saveNote()
+            isRated -> rateIdea()
+            else -> updateNote()
         }
     }
 
@@ -119,14 +158,44 @@ class CreateActivity : AppCompatActivity() {
         note.text = edit_text.text.toString()
         note.title = title_text.text.toString()
 
+        note.simple_rate = seek_simple.progress
+        note.achieve_rate = seek_achieve.progress
+        note.dev_difficulty_rate = seek_dev_dff.progress
+        note.everyday_rate = seek_everyday.progress
+        note.everyone_rate = seek_everyone.progress
+        note.overall_rate = seek_overall_rating.progress
+
         if (!note.title.isNullOrEmpty() || !note.text.isNullOrEmpty())
             saveDataToFirebase(note)
     }
 
+    private fun rateIdea() {
+        id?.simple_rate = seek_simple.progress
+        id?.achieve_rate = seek_achieve.progress
+        id?.dev_difficulty_rate = seek_dev_dff.progress
+        id?.everyday_rate = seek_everyday.progress
+        id?.everyone_rate = seek_everyone.progress
+        id?.overall_rate = seek_overall_rating.progress
+
+        id?.let { updateDataToFirebase(it) }
+    }
+
     private fun updateNote() {
+
         id?.text = edit_text.text.toString()
         id?.title = title_text.text.toString()
-        id?.let { updateDataToFirebase(it) }
+
+        id?.let {
+            if (DataHolder.getInstance(applicationContext).isVerified
+                    && (it.uid == DataHolder.getInstance(applicationContext).uid
+                            || it.uid == null)) {
+                updateDataToFirebase(it)
+            } else {
+                Handler().postDelayed({
+                    showSnackbar("Please login to update Ideas")
+                }, 300)
+            }
+        }
     }
 
     private fun saveDataToFirebase(note: Note) {
@@ -141,21 +210,13 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun updateDataToFirebase(note: Note) {
-        if (DataHolder.getInstance(applicationContext).isVerified
-                && (note.id == DataHolder.getInstance(applicationContext).uid)
-                || note.id == "") {
-            val database = FirebaseDatabase.getInstance()
-            val ideasDB = database.getReference("Ideas")
-            val noteValues: Map<String, Any> = note.toMap()
-            val childUpdates = HashMap<String, Any>()
-            childUpdates["/note/${note.id}"] = noteValues
-            ideasDB.updateChildren(childUpdates)
-            onBackPressed()
-        } else {
-            Handler().postDelayed({
-                showSnackbar("Please login to update Ideas")
-            }, 300)
-        }
+        val database = FirebaseDatabase.getInstance()
+        val ideasDB = database.getReference("Ideas")
+        val noteValues: Map<String, Any> = note.toMap()
+        val childUpdates = HashMap<String, Any>()
+        childUpdates["/note/${note.id}"] = noteValues
+        ideasDB.updateChildren(childUpdates)
+        onBackPressed()
     }
 
     private fun deleteThisNote() {
@@ -198,6 +259,9 @@ class CreateActivity : AppCompatActivity() {
             }
             R.id.action_delete -> {
                 deleteThisNote()
+            }
+            R.id.action_theme -> {
+                initBottomSheet()
             }
             else -> return super.onOptionsItemSelected(item)
         }
