@@ -25,10 +25,10 @@ fun Activity.showSnackbar(message: String) {
 
 }
 
-fun Activity.hideKeyboard() {
+fun Activity.hideKeyboard(view: View) {
     val imm: InputMethodManager = getSystemService(
             Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(contentView?.windowToken, 0)
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
 fun Activity.showKeyboard() {
