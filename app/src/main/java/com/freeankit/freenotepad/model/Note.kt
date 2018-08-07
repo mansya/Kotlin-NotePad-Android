@@ -19,6 +19,7 @@ data class Note(var id: String = "",
                 var everyone_rate: Int? = null,
                 var everyday_rate: Int? = null,
                 var overall_rate: Int? = null,
+                var color: Int? = null,
                 var uid: String? = null) : Serializable {
 
     @Exclude
@@ -33,6 +34,7 @@ data class Note(var id: String = "",
         everyone_rate?.let { result.put("everyone_rate", it) }
         everyday_rate?.let { result.put("everyday_rate", it) }
         overall_rate?.let { result.put("overall_rate", it) }
+        color?.let { result.put("color", it) }
         result["isPinned"] = isPinned
         uid?.let { result.put("uid", it) }
         return result

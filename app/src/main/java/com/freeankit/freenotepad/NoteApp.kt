@@ -12,7 +12,7 @@ import io.fabric.sdk.android.Fabric
 class NoteApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        Fabric.with(this, Crashlytics())
+//        Fabric.with(this, Crashlytics())
 //        DataStore.init(this)
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
     }
