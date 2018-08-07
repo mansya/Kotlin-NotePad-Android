@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetDialog
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -13,6 +14,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.SeekBar
 import com.freeankit.freenotepad.R
 import com.freeankit.freenotepad.helper.TAG
@@ -35,6 +38,7 @@ import java.util.*
 class CreateActivity : AppCompatActivity() {
     private var id: Note? = null
     private var isRated: Boolean = false
+    private var bottomSheetBehavior: BottomSheetBehavior<ViewGroup>? = null
 
     companion object {
         operator fun get(context: Context): Intent {
@@ -59,28 +63,51 @@ class CreateActivity : AppCompatActivity() {
 
     }
 
+
     private fun initBottomSheet() {
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
 
 // change the state of the bottom sheet
-//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+//        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
 //        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
 
 // set the peek height
-        bottomSheetBehavior.peekHeight = 540
+        bottomSheetBehavior?.peekHeight = 540
 
 // set hideable or not
-        bottomSheetBehavior.isHideable = false
-        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior?.isHideable = true
+        bottomSheetBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(p0: View, p1: Float) {
 
             }
 
-            override fun onStateChanged(p0: View, p1: Int) {
+            override fun onStateChanged(p0: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
 
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                    }
+                    BottomSheetBehavior.STATE_SETTLING -> {
+                    }
+                }
             }
         })
+    }
+
+    fun toggleBottomSheet() {
+        if (bottomSheetBehavior?.state != BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior?.setState(BottomSheetBehavior.STATE_EXPANDED)
+        } else {
+            bottomSheetBehavior?.setState(BottomSheetBehavior.STATE_HIDDEN)
+
+        }
     }
 
     override fun onResume() {
@@ -104,6 +131,7 @@ class CreateActivity : AppCompatActivity() {
             onBackPressed()
         }
         initSeekBars()
+        initBottomSheet()
     }
 
     private fun initSeekBars() {
@@ -267,11 +295,24 @@ class CreateActivity : AppCompatActivity() {
                 deleteThisNote()
             }
             R.id.action_theme -> {
-                initBottomSheet()
+//                toggleBottomSheet()
+//                openBottomSheet()
+                showBottomSheetFragment()
             }
             else -> return super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun openBottomSheet() {
+        val view = layoutInflater.inflate(R.layout.bottom_sheet, null)
+        val dialog = BottomSheetDialog(this)
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun showBottomSheetFragment() {
+        val bottomSheetFragment = BottomSheetFragment()
+        bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+    }
 }
