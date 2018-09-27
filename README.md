@@ -1,4 +1,7 @@
 # Kotlin-NotePad
+
+<img src="Logotype primary.png" width="60%" height="60%" />
+
 Notepad Application using kotlin and anko
 
 A Simple notepad sample application using Kotlin, Anko, Vector Drawables
